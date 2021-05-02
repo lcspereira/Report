@@ -7,7 +7,6 @@ class ExpenseTotalizer
     private $expenses;
     private $totals;
 
-
     public function loadFromFile(string $path) : void
     {
         $this->expenses = [];
@@ -15,6 +14,7 @@ class ExpenseTotalizer
             while (($data = fgetcsv($expFile, 0, ',')) !== false) {
                 $this->expenses[] = $data;
             }
+            fclose($expFile);
         }
     }
 
@@ -84,22 +84,33 @@ class ExpenseTotalizer
 
     public function toHtml()
     {
-        echo "<table>";
-        echo "  <thead>";
-        echo "  </thead>";
-        echo "  <tbody>";
+        $html  = "<table>";
+        $html .= "  <thead>";
+        $html .= "  </thead>";
+        $html .= "  <tbody>";
         foreach ($this->totals as $category => $total) {
-            echo "<tr>";
-            echo "  <td>" . $category . "</td>";
-            echo "  <td>" . $total . "</td>";
-            echo "</tr>";
+            $html .= "<tr>";
+            $html .= "  <td>" . $category . "</td>";
+            $html .= "  <td>" . $total . "</td>";
+            $html .= "</tr>";
         }
-        echo "  </tbody>";
-        echo "<table>";
+        $html .= "  </tbody>";
+        $html .= "<table>";
+
+        return $html;
     }
 
-    public function toCsv()
+    public static function exportToCsv(ExpenseTotalizer $totalizer)
     {
-        echo ""
+        $file = fopen('php://memory', 'w');
+        foreach ($totalizer->getTotals() as $category => $total) {
+            $line = [$category,$total];
+            fputcsv($file, $line, ',');
+        }
+        fseek($file, 0);
+        header('Content-type: application/csv');
+        header('Content-Disposition: attachment; filename="total_expenses_' . date('Ymd') . '.csv');
+        fpassthru($file);
+        fclose($file);
     }
 }
