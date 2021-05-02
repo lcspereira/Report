@@ -44,17 +44,13 @@ class ExpenseTotalizer
 
     /**
      * Set the value of totals
-     *
-     * @return  self
      */ 
     public function setTotals($totals)
     {
         $this->totals = $totals;
-
-        return $this;
     }
 
-    public function getCategories() : \Ds\Set
+    public function getCategories() : array
     {
         $categories = new \Ds\Set();
         array_walk($this->expenses, function($expense) use ($categories)
@@ -109,7 +105,7 @@ class ExpenseTotalizer
         }
         fseek($file, 0);
         header('Content-type: application/csv');
-        header('Content-Disposition: attachment; filename="total_expenses_' . date('Ymd') . '.csv');
+        header('Content-Disposition: attachment; filename="total_expenses_' . time() . '.csv');
         fpassthru($file);
         fclose($file);
     }
