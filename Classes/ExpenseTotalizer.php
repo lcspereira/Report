@@ -99,7 +99,7 @@ class ExpenseTotalizer
             $html .= "</tr>";
         }
         $html .= "  </tbody>";
-        $html .= "<table>";
+        $html .= "</table>";
 
         return $html;
     }
