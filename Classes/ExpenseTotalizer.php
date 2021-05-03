@@ -12,10 +12,18 @@ class ExpenseTotalizer
         $this->expenses = [];
         if (($expFile = fopen($path, 'r')) !== false){
             while (($data = fgetcsv($expFile, 0, ',')) !== false) {
+                $data = array_map(array($this, 'sanitize'), $data);
                 $this->expenses[] = $data;
             }
             fclose($expFile);
         }
+    }
+
+    private function sanitize(string $info) : string
+    {
+        $info = stripcslashes($info);
+        $info = strip_tags($info);
+        return $info;
     }
 
     /**
