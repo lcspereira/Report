@@ -1,6 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+  "http://www.w3.org/TR/html4/loose.dtd">
 <?php
 require_once "../vendor/autoload.php";
 use Classes\ExpenseTotalizer;
+use Volnix\CSRF\CSRF;
 session_start();
 
 if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
@@ -15,7 +18,7 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
 </head>
 <body>
     <?php
-        if (isset($_POST['expenseSubmit'])) {
+        if (isset($_POST['expenseSubmit']) && CSRF::validate($_POST)) {
             $totalizer = new ExpenseTotalizer();
             $destFilePath = '../uploads/' . time() . '.csv';
             copy ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
@@ -27,6 +30,7 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
         }
     ?>
     <form action="index.php" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="<?= CSRF::TOKEN_NAME ?>" value="<?= CSRF::getToken() ?>"/>
         Upload a new CSV file<br />
         <input type="file" name="expensesUpload" id="expensesUpload" /><br />
         <input type="submit" value="Upload" name="expenseSubmit" id="expenseSubmit" />
