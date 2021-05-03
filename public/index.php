@@ -22,7 +22,7 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
         if (isset($_POST['expenseSubmit']) && CSRF::validate($_POST)) {
             $totalizer = new ExpenseTotalizer();
             $destFilePath = '../uploads/' . time() . '.csv';
-            copy ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
+            move_uploaded_file ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
             try {
                 $totalizer->loadFromFile($destFilePath);
                 $totalizer->totalize();
