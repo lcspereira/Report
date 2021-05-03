@@ -17,7 +17,9 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
     <?php
         if (isset($_POST['expenseSubmit'])) {
             $totalizer = new ExpenseTotalizer();
-            $totalizer->loadFromFile($_FILES['expensesUpload']['tmp_name']);
+            $destFilePath = '../uploads/' . time() . '.csv';
+            copy ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
+            $totalizer->loadFromFile($destFilePath);
             $totalizer->totalize();
             echo $totalizer->toHtml();
             echo "<br />Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a><br />";
