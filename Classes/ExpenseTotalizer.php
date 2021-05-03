@@ -1,6 +1,7 @@
 <?php
 
 namespace Classes;
+use InvalidFileException;
 
 class ExpenseTotalizer
 {
@@ -13,6 +14,9 @@ class ExpenseTotalizer
         if (($expFile = fopen($path, 'r')) !== false){
             while (($data = fgetcsv($expFile, 0, ',')) !== false) {
                 $data = array_map(array($this, 'sanitize'), $data);
+                if ((isset ($data[1]) && !is_numeric($data[1])) || (isset($data[2]) && !is_numeric($data[2]))) {
+                    throw new InvalidFileException("Invalid file format", -1);
+                }
                 $this->expenses[] = $data;
             }
             fclose($expFile);

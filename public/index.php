@@ -3,6 +3,7 @@
 <?php
 require_once "../vendor/autoload.php";
 use Classes\ExpenseTotalizer;
+use Classes\InvalidFileException;
 use Volnix\CSRF\CSRF;
 session_start();
 
@@ -22,11 +23,15 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
             $totalizer = new ExpenseTotalizer();
             $destFilePath = '../uploads/' . time() . '.csv';
             copy ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
-            $totalizer->loadFromFile($destFilePath);
-            $totalizer->totalize();
-            echo $totalizer->toHtml();
-            echo "<br />Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a><br />";
-            $_SESSION['totalizer'] = serialize($totalizer);
+            try {
+                $totalizer->loadFromFile($destFilePath);
+                $totalizer->totalize();
+                echo $totalizer->toHtml();
+                echo "<br />Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a><br />";
+                $_SESSION['totalizer'] = serialize($totalizer);
+            } catch (InvalidFileException $ex) {
+                echo "<script type='text/javascript'>alert('" . $ex->getMessage() . "');</script>";
+            }
         }
     ?>
     <form action="index.php" method="post" enctype="multipart/form-data">
