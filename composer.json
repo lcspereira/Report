@@ -3,5 +3,8 @@
         "psr-4": {
             "Classes\\": "Classes/"
         }
+    },
+    "require": {
+        "volnix/csrf": "^1.2"
     }
 }
