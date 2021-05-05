@@ -1,7 +1,7 @@
 <?php
 
 namespace Classes;
-use InvalidFileException;
+use Classes\InvalidFileException;
 
 class ExpenseTotalizer
 {

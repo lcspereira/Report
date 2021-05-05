@@ -23,9 +23,6 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
             $totalizer = new ExpenseTotalizer();
             $destFilePath = '../uploads/' . time() . '.csv';
             try {
-                if (mime_content_type($_FILES['expensesUpload']['tmp_name']) !== 'text/csv') {
-                    throw new InvalidFileException('File is not CSV');
-                }
                 move_uploaded_file ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
                 $totalizer->loadFromFile($destFilePath);
                 $totalizer->totalize();
