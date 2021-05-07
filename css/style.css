@@ -1,0 +1,21 @@
+table {
+    border: 1px solid #000;
+    border-spacing: 0;
+    width: 20%;
+}
+
+.form-sep {
+    margin-top: 15px;
+}
+
+.default-sep {
+    margin-bottom: 5px;
+}
+
+th, td {
+    border: 1px solid #000
+}
+
+tr:nth-child(even) {
+    background-color: #c0c0c0;
+}
