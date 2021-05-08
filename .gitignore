@@ -1,0 +1,5 @@
+/vendor
+/public/dist
+/uploads
+test.csv
+/node_modules
