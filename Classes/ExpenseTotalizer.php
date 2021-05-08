@@ -122,13 +122,13 @@ class ExpenseTotalizer
      * 
      * @return string: Expense totals in HTML table format
      */
-    public function toHtml() : string
+    public static function toHtml(ExpenseTotalizer $totalizer) : string
     {
         $html  = "<table>";
         $html .= "  <thead>";
         $html .= "  </thead>";
         $html .= "  <tbody>";
-        foreach ($this->totals as $category => $total) {
+        foreach ($totalizer->totals as $category => $total) {
             $html .= "<tr>";
             $html .= "  <td>" . $category . "</td>";
             $html .= "  <td>" . $total . "</td>";

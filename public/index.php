@@ -29,7 +29,7 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
                 move_uploaded_file ($_FILES['expensesUpload']['tmp_name'], $destFilePath);
                 $totalizer->loadFromFile($destFilePath);
                 $totalizer->totalize();
-                echo $totalizer->toHtml();
+                echo ExpenseTotalizer::toHtml($totalizer);
                 echo "Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a>";
                 $_SESSION['totalizer'] = serialize($totalizer);
             } catch (InvalidFileException $ex) {
