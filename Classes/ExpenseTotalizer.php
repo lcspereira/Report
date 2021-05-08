@@ -3,11 +3,19 @@
 namespace Classes;
 use Classes\InvalidFileException;
 
+/**
+ * Class to calculate expenses from expenses file
+ */
 class ExpenseTotalizer
 {
     private $expenses;
     private $totals;
 
+    /**
+     * Load expenses from file
+     * 
+     * @param string: File path
+     */
     public function loadFromFile(string $path) : void
     {
         $this->expenses = [];
@@ -23,6 +31,12 @@ class ExpenseTotalizer
         }
     }
 
+    /**
+     * Sanitize data
+     * 
+     * @param string: Info to be sanitized
+     * @return: Info without slashes and tags
+     */
     private function sanitize(string $info) : string
     {
         $info = stripcslashes($info);
@@ -62,6 +76,11 @@ class ExpenseTotalizer
         $this->totals = $totals;
     }
 
+    /**
+     * Get the expense categories list
+     * 
+     * @return array: Unique categories list
+     */
     public function getCategories() : array
     {
         $categories = new \Ds\Set();
@@ -72,6 +91,11 @@ class ExpenseTotalizer
         return $categories->toArray();
     }
 
+    /**
+     * Calculates expense total for a category and stores on total
+     * 
+     * @param string: Category to be calculated
+     */
     public function totalizeCategory(string $category) : void
     {
         $this->totals[$category] = 0;
@@ -83,6 +107,9 @@ class ExpenseTotalizer
         }
     }
 
+    /**
+     * Totalize expenses for all categories on expenses file
+     */
     public function totalize() : void
     {
         foreach ($this->getCategories() as $category) {
@@ -90,7 +117,12 @@ class ExpenseTotalizer
         }
     }
 
-    public function toHtml()
+    /**
+     * Prints expense totals table to HTML
+     * 
+     * @return string: Expense totals in HTML table format
+     */
+    public function toHtml() : string
     {
         $html  = "<table>";
         $html .= "  <thead>";
@@ -108,7 +140,12 @@ class ExpenseTotalizer
         return $html;
     }
 
-    public static function exportToCsv(ExpenseTotalizer $totalizer)
+    /**
+     * Exports expense totals to CSV
+     * 
+     * @param ExpenseTotalizer: Expense totalizer object to be exported
+     */
+    public static function exportToCsv(ExpenseTotalizer $totalizer) : void
     {
         $file = fopen('php://memory', 'w');
         foreach ($totalizer->getTotals() as $category => $total) {
