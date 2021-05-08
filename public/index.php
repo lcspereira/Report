@@ -15,9 +15,10 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
 ?>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
 </head>
 <body>
+    <div class="default-sep">
     <?php
         if (isset($_POST['expenseSubmit']) && CSRF::validate($_POST)) {
             $totalizer = new ExpenseTotalizer();
@@ -27,19 +28,26 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
                 $totalizer->loadFromFile($destFilePath);
                 $totalizer->totalize();
                 echo $totalizer->toHtml();
-                echo "<br />Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a><br />";
+                echo "Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a>";
                 $_SESSION['totalizer'] = serialize($totalizer);
             } catch (InvalidFileException $ex) {
                 echo "<script type='text/javascript'>alert('" . $ex->getMessage() . "');</script>";
             }
         }
     ?>
-    <form action="index.php" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="<?= CSRF::TOKEN_NAME ?>" value="<?= CSRF::getToken() ?>"/>
-        Upload a new CSV file<br />
-        <input type="file" name="expensesUpload" id="expensesUpload" /><br />
-        <input type="submit" value="Upload" name="expenseSubmit" id="expenseSubmit" />
-    </form>
+    </div>
+    <div class="form-sep">
+        <form action="index.php" method="post" enctype="multipart/form-data" name='expenseFileForm' id='expenseFileForm'>
+            <input type="hidden" name="<?= CSRF::TOKEN_NAME ?>" value="<?= CSRF::getToken() ?>"/>
+            <div class='default-sep'>
+                Upload a new CSV file
+            </div>
+
+            <input type="file" name="expensesUpload" id="expensesUpload" class="default-sep" /><br />
+            <input type="submit" value="Upload" name="expenseSubmit" id="expenseSubmit" class="default-sep"/>
+        </form>
+    </div>
+    <script type="text/javascript" src="dist/bundle.js"></script>
 </body>
 </html>
 <?php } ?>
