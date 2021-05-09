@@ -35,6 +35,8 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
             } catch (InvalidFileException $ex) {
                 echo "<script type='text/javascript'>alert('" . $ex->getMessage() . "');</script>";
             }
+        } elseif (isset($_SESSION['totalizer'])) {
+            echo ExpenseTotalizer::toHtml(unserialize($_SESSION['totalizer']));
         }
     ?>
     </div>
