@@ -5,6 +5,7 @@
         }
     },
     "require": {
-        "volnix/csrf": "^1.2"
+        "volnix/csrf": "^1.2",
+        "phpunit/phpunit": "^9.5"
     }
 }
