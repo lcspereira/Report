@@ -22,7 +22,7 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
     <div class="default-sep">
     <?php
         if (isset($_POST['expenseSubmit']) && CSRF::validate($_POST)) {
-            // Expenses file processing
+            // Expense file processing
             $totalizer = new ExpenseTotalizer();
             $destFilePath = '../uploads/' . time() . '.csv';
             try {

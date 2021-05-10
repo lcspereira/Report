@@ -4,7 +4,7 @@ namespace Classes;
 use Classes\InvalidFileException;
 
 /**
- * Class to calculate expenses from expenses file
+ * Class to calculate expenses from expense file
  */
 class ExpenseTotalizer
 {
@@ -124,7 +124,7 @@ class ExpenseTotalizer
     }
 
     /**
-     * Totalize expenses for all categories on expenses file
+     * Totalize expenses for all categories on expense file
      */
     public function totalize() : void
     {
