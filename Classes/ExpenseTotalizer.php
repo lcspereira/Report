@@ -28,6 +28,8 @@ class ExpenseTotalizer
                 $this->expenses[] = $data;
             }
             fclose($expFile);
+        } else {
+            throw new InvalidFileException('File not found', -2);
         }
     }
 
