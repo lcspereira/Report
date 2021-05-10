@@ -19,18 +19,32 @@ class ExpenseTotalizer
     public function loadFromFile(string $path) : void
     {
         $this->expenses = [];
-        if (($expFile = fopen($path, 'r')) !== false){
-            while (($data = fgetcsv($expFile, 0, ',')) !== false) {
-                $data = array_map(array($this, 'sanitize'), $data);
-                if ((isset ($data[1]) && !is_numeric($data[1])) || (isset($data[2]) && !is_numeric($data[2]))) {
-                    throw new InvalidFileException("Invalid file format", -1);
+        try {
+            if (($expFile = fopen($path, 'r')) !== false){
+                while (($data = fgetcsv($expFile, 0, ',')) !== false) {
+                    $this->addExpense($data);
                 }
-                $this->expenses[] = $data;
+                fclose($expFile);
+            } else {
+                throw new InvalidFileException('File not found', -2);
             }
-            fclose($expFile);
-        } else {
-            throw new InvalidFileException('File not found', -2);
+        } catch (InvalidFileException $ex) {
+            throw new InvalidFileException ($ex->getMessage(), $ex->getCode());
         }
+    }
+
+    /**
+     * Add expense to totalizer
+     * 
+     * @param array: Expense to be added
+     */
+    public function addExpense(array $data) : void
+    {
+        $data = array_map(array($this, 'sanitize'), $data);
+        if ((isset ($data[1]) && !is_numeric($data[1])) || (isset($data[2]) && !is_numeric($data[2]))) {
+            throw new InvalidFileException("Invalid file format", -1);
+        }
+        $this->expenses[] = $data;
     }
 
     /**
