@@ -4,13 +4,6 @@ use Classes\ExpenseTotalizer;
 use Classes\InvalidFileException;
 use Volnix\CSRF\CSRF;
 session_start();
-
-if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
-    // Export expenses totals to CSV
-    if (isset($_SESSION['totalizer'])) {
-        ExpenseTotalizer::exportToCsv(unserialize($_SESSION['totalizer']));
-    }
-} else {
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
   "http://www.w3.org/TR/html4/loose.dtd">
@@ -30,13 +23,14 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
                 $totalizer->loadFromFile($destFilePath);
                 $totalizer->totalize();
                 echo ExpenseTotalizer::toHtml($totalizer);
-                echo "Download this report as CSV - <a href='index.php?export=yes' target='_blank'>click here</a>";
+                echo "Download this report as CSV - <a href='export.php' target='_blank'>click here</a>";
                 $_SESSION['totalizer'] = serialize($totalizer);
             } catch (InvalidFileException $ex) {
                 echo "<script type='text/javascript'>alert('" . $ex->getMessage() . "');</script>";
             }
         } elseif (isset($_SESSION['totalizer'])) {
             echo ExpenseTotalizer::toHtml(unserialize($_SESSION['totalizer']));
+            echo "Download this report as CSV - <a href='export.php' target='_blank'>click here</a>";
         }
     ?>
     </div>
@@ -54,4 +48,3 @@ if (isset($_GET['export']) && ($_GET['export'] == 'yes')) {
     <script type="text/javascript" src="dist/bundle.js"></script>
 </body>
 </html>
-<?php } ?>
